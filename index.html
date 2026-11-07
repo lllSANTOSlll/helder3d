@@ -28,15 +28,17 @@
   main { width: 100%; max-width: 380px; display: flex; flex-direction: column; align-items: center; }
 
   /* the keychain: ring + name in three layers */
-  .key { position: relative; width: 100%; display: flex; align-items: center; justify-content: center; padding: 18px 0 8px; }
-  .ring { position: absolute; left: 4px; top: 50%; width: 46px; height: 46px; margin-top: -30px; border-radius: 50%;
-    border: 5px solid #b9bcc2; box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 1px 2px rgba(0,0,0,.25);
-    background: transparent; transform: rotate(-12deg); }
-  .ring::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; border: 1px solid rgba(255,255,255,.55); }
+  .key { position: relative; width: 100%; display: flex; align-items: center; justify-content: center; padding: 26px 0 10px; }
+  /* split ring through the keychain's left end; sizes follow the name's font size */
+  .ring { position: absolute; z-index: 2; left: -.42em; top: 50%; width: .78em; height: .78em; margin-top: -.62em; border-radius: 50%;
+    border: .085em solid #b4b8bf; box-shadow: inset 0 .02em 0 rgba(255,255,255,.8), 0 .03em .05em rgba(0,0,0,.3); transform: rotate(-14deg); }
+  .ring::after { content: ""; position: absolute; inset: .03em; border-radius: 50%; border: .015em solid rgba(255,255,255,.6); }
+  .hole { position: absolute; z-index: 1; left: -.08em; top: 50%; width: .2em; height: .2em; margin-top: -.3em; border-radius: 50%; background: var(--bg); }
   .name { position: relative; font-family: "Pacifico", cursive; font-weight: 400; line-height: 1.25; white-space: nowrap;
-    font-size: 64px; padding: 0 .2em 0 .35em; }
+    font-size: 76px; padding: 0 .2em 0 .35em; margin-left: .3em; }
   .name span { display: block; }
   .name span + span { position: absolute; inset: 0; padding: inherit; }
+  .name i { font-style: normal; }
   .name .base { color: var(--key); -webkit-text-stroke: .34em var(--key); paint-order: stroke fill;
     filter: drop-shadow(0 6px 10px rgba(0,0,0,.18)); }
   .name .outl { color: #fff; -webkit-text-stroke: .13em #fff; paint-order: stroke fill; }
@@ -63,8 +65,7 @@
 <body>
 <main id="card">
   <div class="key" aria-hidden="true">
-    <div class="ring"></div>
-    <div class="name" id="key"><span class="base"></span><span class="outl"></span><span class="top"></span></div>
+    <div class="name" id="key"><span class="base"></span><span class="outl"></span><span class="top"></span><i class="hole"></i><i class="ring"></i></div>
   </div>
   <div class="who">
     <div class="full" id="full"></div>
@@ -121,7 +122,7 @@
   $('tel').textContent = pretty;
   // shrink long names to fit the width
   function fit() {
-    var k = $('key'), box = k.parentNode.clientWidth - 40, fs = 64;
+    var k = $('key'), box = k.parentNode.clientWidth - 60, fs = 76;
     k.style.fontSize = fs + 'px';
     while (k.scrollWidth > box && fs > 26) { fs -= 2; k.style.fontSize = fs + 'px'; }
   }
