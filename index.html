@@ -2,77 +2,140 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>Contact</title>
-<!-- NFC keychain contact card. The tag holds a link like  https://<you>.github.io/t/#n=Emma%20Smith&p=5145551234
-     The name and phone ride in the part after # (never sent to any server); this one page shows them all. -->
+<!-- NFC keychain contact card. The tag holds a link like  https://<you>.github.io/<repo>/#n=Emma+Smith&p=5145551234&c=g
+     n = name, p = phone, c = keychain colour (w white, p pink, l lavender, k klein blue, g green, r red, b blue, y yellow).
+     Everything after # stays in the phone (never sent to a server). The name is drawn like the printed keychain:
+     colour base, white outline, colour letters, in the same Pacifico font. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <style>
-  :root { --bg: #f3f1fb; --card: #ffffff; --tx: #1a1d2e; --mut: #6b6f85; --a1: #7c5cff; --a2: #ff5c8a; --btn: #1a1d2e; --btx: #fff; --line: #e6e3f3; }
-  @media (prefers-color-scheme: dark) { :root { --bg: #12121a; --card: #1d1d29; --tx: #f1f0f7; --mut: #a3a2b8; --btn: #f1f0f7; --btx: #12121a; --line: #2c2c3c; } }
+  :root { --bg: #f5f2ec; --dot: #e3ddd2; --ink: #1f2126; --mut: #77736b; --line: #d9d3c8; --key: #1f7a3a; --keyTx: #fff; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #17181b; --dot: #24262b; --ink: #f2efe9; --mut: #9b978f; --line: #34363c; } }
   * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; }
-  body { background: var(--bg); color: var(--tx); font: 16px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px 16px; }
-  .card { width: 100%; max-width: 360px; background: var(--card); border-radius: 28px; padding: 36px 24px 26px; text-align: center;
-    box-shadow: 0 18px 50px rgba(60, 40, 140, .15); border: 1px solid var(--line); }
-  .av { width: 112px; height: 112px; margin: 0 auto 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-size: 50px; font-weight: 800; color: #fff; background: linear-gradient(135deg, var(--a1), var(--a2)); box-shadow: 0 10px 28px rgba(124, 92, 255, .35); }
-  h1 { margin: 0 0 6px; font-size: 28px; letter-spacing: -.3px; word-break: break-word; }
-  .ph { color: var(--mut); font-size: 18px; margin-bottom: 26px; letter-spacing: .3px; }
-  .b { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; border-radius: 16px; border: 0;
-    font: 700 17px/1 inherit; font-family: inherit; text-decoration: none; cursor: pointer; margin-top: 10px; }
-  .call { background: linear-gradient(135deg, var(--a1), var(--a2)); color: #fff; }
-  .save { background: transparent; color: var(--tx); border: 2px solid var(--line); }
-  .ft { margin-top: 22px; font-size: 12px; color: var(--mut); }
-  .empty h1 { font-size: 22px; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh; min-height: 100dvh; color: var(--ink); background-color: var(--bg);
+    /* a print-bed texture */
+    background-image: radial-gradient(var(--dot) 1.2px, transparent 1.3px); background-size: 18px 18px;
+    font: 16px/1.4 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: max(28px, env(safe-area-inset-top)) 20px max(28px, env(safe-area-inset-bottom));
+  }
+  main { width: 100%; max-width: 380px; display: flex; flex-direction: column; align-items: center; }
+
+  /* the keychain: ring + name in three layers */
+  .key { position: relative; width: 100%; display: flex; align-items: center; justify-content: center; padding: 18px 0 8px; }
+  .ring { position: absolute; left: 4px; top: 50%; width: 46px; height: 46px; margin-top: -30px; border-radius: 50%;
+    border: 5px solid #b9bcc2; box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 1px 2px rgba(0,0,0,.25);
+    background: transparent; transform: rotate(-12deg); }
+  .ring::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; border: 1px solid rgba(255,255,255,.55); }
+  .name { position: relative; font-family: "Pacifico", cursive; font-weight: 400; line-height: 1.25; white-space: nowrap;
+    font-size: 64px; padding: 0 .2em 0 .35em; }
+  .name span { display: block; }
+  .name span + span { position: absolute; inset: 0; padding: inherit; }
+  .name .base { color: var(--key); -webkit-text-stroke: .34em var(--key); paint-order: stroke fill;
+    filter: drop-shadow(0 6px 10px rgba(0,0,0,.18)); }
+  .name .outl { color: #fff; -webkit-text-stroke: .13em #fff; paint-order: stroke fill; }
+  .name .top { color: var(--key); }
+
+  .who { margin-top: 26px; text-align: center; }
+  .who .full { font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: var(--mut); font-weight: 600; }
+  .who .tel { margin-top: 6px; font-size: 30px; font-weight: 700; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+
+  .acts { width: 100%; margin-top: 26px; display: grid; gap: 10px; }
+  .b { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 56px; padding: 0 18px;
+    border-radius: 14px; font: 600 17px/1 inherit; font-family: inherit; text-decoration: none; cursor: pointer;
+    -webkit-tap-highlight-color: transparent; transition: transform .08s; }
+  .b:active { transform: scale(.98); }
+  .b svg { width: 20px; height: 20px; flex: none; }
+  .call { background: var(--key); color: var(--keyTx); border: 0; }
+  .save { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+
+  .ft { margin-top: 30px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--mut); letter-spacing: .04em; }
+  .ft svg { width: 16px; height: 16px; }
+  .empty .name, .empty .acts, .empty .who .tel { display: none; }
 </style>
 </head>
 <body>
-<div class="card" id="card">
-  <div class="av" id="av">📶</div>
-  <h1 id="nm"></h1>
-  <div class="ph" id="ph"></div>
-  <a class="b call" id="call" href="#">📞 <span id="callT"></span></a>
-  <button class="b save" id="save" type="button">👤 <span id="saveT"></span></button>
-  <div class="ft" id="ft"></div>
-</div>
+<main id="card">
+  <div class="key" aria-hidden="true">
+    <div class="ring"></div>
+    <div class="name" id="key"><span class="base"></span><span class="outl"></span><span class="top"></span></div>
+  </div>
+  <div class="who">
+    <div class="full" id="full"></div>
+    <div class="tel" id="tel"></div>
+  </div>
+  <div class="acts">
+    <a class="b call" id="call" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+      <span id="callT"></span></a>
+    <button class="b save" id="save" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+      <span id="saveT"></span></button>
+  </div>
+  <div class="ft">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8.3a6 6 0 0 1 0 7.4M9.5 5.5a10 10 0 0 1 0 13M13 3a14 14 0 0 1 0 18"/></svg>
+    <span id="ft"></span>
+  </div>
+</main>
 <script>
 (function () {
   var fr = /^fr/i.test(navigator.language || '');
-  var T = fr ? { call: 'Appeler', save: 'Enregistrer le contact', ft: 'Porte-clés NFC', empty: 'Cette puce est vide', title: 'Contact' }
-             : { call: 'Call', save: 'Save contact', ft: 'NFC keychain', empty: 'This tag is empty', title: 'Contact' };
+  var T = fr ? { call: 'Appeler', save: 'Ajouter aux contacts', ft: 'Porte-clés NFC imprimé en 3D', empty: 'Cette puce est vide' }
+             : { call: 'Call', save: 'Add to contacts', ft: '3D-printed NFC keychain', empty: 'This tag is empty' };
+  // the shop's colours (c=); dark text on the light ones
+  var C = { w: ['#f4f4f2', '#1f2126'], p: ['#ec8fb4', '#1f2126'], l: ['#6f62b8', '#fff'], k: ['#2430b8', '#fff'], g: ['#2f9e46', '#fff'],
+            r: ['#d32f2f', '#fff'], b: ['#1565c0', '#fff'], y: ['#f9c80e', '#1f2126'] };
   var q = {};
   (location.hash || '').replace(/^#/, '').split('&').forEach(function (kv) {
     var i = kv.indexOf('=');
     if (i > 0) try { q[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1).replace(/\+/g, ' ')); } catch (e) {}
   });
-  var name = (q.n || '').trim().slice(0, 60), tel = (q.p || '').replace(/[^\d+]/g, '').slice(0, 20);
   var $ = function (id) { return document.getElementById(id); };
-  $('ft').textContent = T.ft;
-  if (!name && !tel) {
-    document.getElementById('card').className += ' empty';
-    $('nm').textContent = T.empty; $('call').style.display = 'none'; $('save').style.display = 'none';
-    return;
+  var name = (q.n || '').trim().slice(0, 60), tel = (q.p || '').replace(/[^\d+]/g, '').slice(0, 20);
+  var col = C[q.c] || C.k, root = document.documentElement.style;
+  root.setProperty('--key', col[0]); root.setProperty('--keyTx', col[1]);
+  if (q.c === 'w') { // a white keychain: grey base so it shows on the page
+    root.setProperty('--key', '#e9e7e2');
+    document.querySelector('.name .top').style.color = '#ffffff';
+    document.querySelector('.name .outl').style.color = '#cfccc5';
+    document.querySelector('.name .outl').style.webkitTextStroke = '.13em #cfccc5';
   }
-  // phone shown as 514 555-1234 / +1 514 555-1234 when it looks North American
+  $('ft').textContent = T.ft; $('callT').textContent = T.call; $('saveT').textContent = T.save;
+  if (!name && !tel) { $('card').className = 'empty'; $('full').textContent = T.empty; return; }
+
   var d = tel.replace(/\D/g, ''), pretty = tel;
   if (d.length === 10) pretty = d.slice(0, 3) + ' ' + d.slice(3, 6) + '-' + d.slice(6);
   else if (d.length === 11 && d[0] === '1') pretty = '+1 ' + d.slice(1, 4) + ' ' + d.slice(4, 7) + '-' + d.slice(7);
-  document.title = name || T.title;
-  $('nm').textContent = name;
-  $('ph').textContent = pretty;
-  var first = Array.from ? Array.from(name)[0] : name.charAt(0);
-  $('av').textContent = first ? first.toUpperCase() : '📶';
-  $('callT').textContent = T.call; $('saveT').textContent = T.save;
+  document.title = name || pretty;
+
+  // the keychain shows the first name, like the printed one; the full name sits under it
+  var first = name.split(/\s+/)[0] || pretty;
+  [].forEach.call(document.querySelectorAll('.name span'), function (s) { s.textContent = first; });
+  $('full').textContent = name && name !== first ? name : '';
+  $('tel').textContent = pretty;
+  // shrink long names to fit the width
+  function fit() {
+    var k = $('key'), box = k.parentNode.clientWidth - 40, fs = 64;
+    k.style.fontSize = fs + 'px';
+    while (k.scrollWidth > box && fs > 26) { fs -= 2; k.style.fontSize = fs + 'px'; }
+  }
+  fit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  addEventListener('resize', fit);
+
   if (tel) $('call').href = 'tel:' + tel; else $('call').style.display = 'none';
   $('save').addEventListener('click', function () {
     var esc = function (s) { return s.replace(/([,;\\])/g, '\\$1'); };
     var parts = name.split(/\s+/), last = parts.length > 1 ? parts.pop() : '', given = parts.join(' ');
     var v = 'BEGIN:VCARD\r\nVERSION:3.0\r\nFN:' + esc(name || pretty) + '\r\nN:' + esc(last) + ';' + esc(given) + ';;;\r\n' +
       (tel ? 'TEL;TYPE=CELL:' + tel + '\r\n' : '') + 'END:VCARD\r\n';
-    var blob = new Blob([v], { type: 'text/vcard;charset=utf-8' }), url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
+    var url = URL.createObjectURL(new Blob([v], { type: 'text/vcard;charset=utf-8' })), a = document.createElement('a');
     a.href = url; a.download = (name || 'contact').replace(/[^\w\- ]+/g, '') + '.vcf';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
